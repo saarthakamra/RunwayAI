@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RunwayAI - Monocular Runway Detection & Dual-Feasibility HUD</title>
+    <style>
+        :root {
+            --bg-primary: #0b0f19;
+            --bg-card: #131b2e;
+            --accent-cyan: #00d2ff;
+            --accent-green: #00ff88;
+            --accent-amber: #ffb703;
+            --accent-red: #ff3366;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            margin: 0;
+            padding: 24px;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
+        }
+        .header h1 {
+            color: var(--accent-cyan);
+            font-size: 28px;
+            margin: 0 0 8px;
+            letter-spacing: 1px;
+        }
+        .header p {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 15px;
+        }
+        .badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 14px;
+        }
+        .badge {
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+        .badge-live {
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .card-featured {
+            border: 1.5px solid var(--accent-green);
+            background: linear-gradient(180deg, #162438 0%, #131b2e 100%);
+        }
+        .card h2 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card img {
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            background: #000;
+        }
+        .status-pill {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .pill-green { background: rgba(0, 255, 136, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .pill-red { background: rgba(255, 51, 102, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .pill-amber { background: rgba(255, 183, 3, 0.15); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
+        .feasibility-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+        }
+        .feasibility-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .feasibility-row:last-child {
+            margin-bottom: 0;
+        }
+        .math-section {
+            background: var(--bg-card);
+            border: 1px solid rgba(0, 210, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 36px;
+        }
+        .math-section h3 {
+            color: var(--accent-cyan);
+            margin-top: 0;
+        }
+        code {
+            background: #090d16;
+            color: #38bdf8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>RUNWAY AI &mdash; MONOCULAR RUNWAY DETECTION & FEASIBILITY ENGINE</h1>
+        <p>Demonstrating Pure Monocular Vision, Vanishing Point Alignment, IPM Top-Down Projection, and Dual-Avenue Decision Logic</p>
+        <div class="badges">
+            <span class="badge badge-live">&bull; ACTUAL FLIGHT FOOTAGE OVERLAY</span>
+            <span class="badge">Pure Monocular Vision (RGB Only)</span>
+            <span class="badge">Dual Aircraft Profiles</span>
+            <span class="badge">Zero Bulky Simulators (&lt; 15 MB Total)</span>
+            <span class="badge">Tactical Aviation HUD Overlay</span>
+        </div>
+    </div>
+
+    <div class="scenario-grid">
+        <!-- Featured: Actual Flight Footage -->
+        <div class="card card-featured">
+            <h2>
+                <span>Live Demo: Actual Real Flight (Airbus/LARD)</span>
+                <span class="status-pill pill-green">AUTHENTIC FLIGHT</span>
+            </h2>
+            <img src="Real_Flight_touchdown_phase.png" alt="Real Flight HUD Touchdown">
+            <div class="feasibility-box">
+                <div class="feasibility-row">
+                    <strong>Big Commercial Aircraft:</strong>
+                    <span class="status-pill pill-green">FEASIBLE</span>
+                </div>
+                <p style="margin: 4px 0 10px; color: var(--text-muted); font-size: 12px;">
+                    &bull; Real runway 24 detected with verified threshold piano keys, centerline, aspect ratio ~40.4, nominal alignment +0.3 deg.
+                </p>
+                <div class="feasibility-row">
+                    <strong>RC Plane / Fixed-Wing UAV:</strong>
+                    <span class="status-pill pill-green">FEASIBLE</span>
+                </div>
+                <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 12px;">
+                    &bull; Paved certified strip exceeds all safety margins; clear corridor.
+                </p>
+            </div>
+        </div>
+
+        <!-- Scenario A: Certified Commercial Airport -->
+        <div class="card">
+            <h2>
+                <span>Scenario A: Certified Commercial Airport</span>
+                <span class="status-pill pill-green">COMMERCIAL APPROVED</span>
+            </h2>
+            <img src="Scenario_A_Certified_Airport_mid_approach.png" alt="Scenario A HUD">
+            <div class="feasibility-box">
+                <div class="feasibility-row">
+                    <strong>Big Commercial Aircraft:</strong>
+                    <span class="status-pill pill-green">FEASIBLE</span>
+                </div>
+                <p style="margin: 4px 0 10px; color: var(--text-muted); font-size: 12px;">
+                    &bull; Certified asphalt surface, ICAO threshold piano keys detected, aligned approach, aspect ratio &ge; 8.0.
+                </p>
+                <div class="feasibility-row">
+                    <strong>RC Plane / Fixed-Wing UAV:</strong>
+                    <span class="status-pill pill-green">FEASIBLE</span>
+                </div>
+                <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 12px;">
+                    &bull; Paved strip exceeds minimum length and width; clear landing corridor.
+                </p>
+            </div>
+        </div>
+
+        <!-- Scenario B: Unpaved Grass Airfield -->
+        <div class="card">
+            <h2>
+                <span>Scenario B: Unpaved Grass Airfield</span>
+                <span class="status-pill pill-green">RC FIELD APPROVED</span>
+            </h2>
+            <img src="Scenario_B_RC_Grass_Strip_mid_approach.png" alt="Scenario B HUD">
+            <div class="feasibility-box">
+                <div class="feasibility-row">
+                    <strong>Big Commercial Aircraft:</strong>
+                    <span class="status-pill pill-red">INFEASIBLE / REJECTED</span>
+                </div>
+                <p style="margin: 4px 0 10px; color: var(--text-muted); font-size: 12px;">
+                    &bull; Rejected: Unpaved grass surface cannot support transport aircraft gear weight; missing certified markings.
+                </p>
+                <div class="feasibility-row">
+                    <strong>RC Plane / Fixed-Wing UAV:</strong>
+                    <span class="status-pill pill-green">FEASIBLE</span>
+                </div>
+                <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 12px;">
+                    &bull; Smooth mowed grass fairway, clear corridor, obstacle-free.
+                </p>
+            </div>
+        </div>
+
+        <!-- Scenario C: Obstructed / Infeasible Field -->
+        <div class="card">
+            <h2>
+                <span>Scenario C: Obstructed / Infeasible Field</span>
+                <span class="status-pill pill-red">GO-AROUND TRIGGERED</span>
+            </h2>
+            <img src="Scenario_C_Obstructed_Hazard_Strip_touchdown_phase.png" alt="Scenario C HUD">
+            <div class="feasibility-box">
+                <div class="feasibility-row">
+                    <strong>Big Commercial Aircraft:</strong>
+                    <span class="status-pill pill-red">ABORT / GO-AROUND</span>
+                </div>
+                <p style="margin: 4px 0 10px; color: var(--text-muted); font-size: 12px;">
+                    &bull; Runway incursion detected in touchdown corridor; unpaved surface.
+                </p>
+                <div class="feasibility-row">
+                    <strong>RC Plane / Fixed-Wing UAV:</strong>
+                    <span class="status-pill pill-red">ABORT / HAZARD</span>
+                </div>
+                <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 12px;">
+                    &bull; Critical safety hazard: Foreign obstacle detected on strip. Go-around commanded.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="math-section">
+        <h3>Pure Monocular Vision Geometry Pipeline</h3>
+        <p>1. <strong>Vanishing Point Alignment (Heading Error):</strong> The intersection of runway side edge lines yields vanishing point <code>V_p = (u_v, v_v)</code>. Relative heading crab angle is <code>&Delta;&psi; = arctan((u_v - c_x) / f_x)</code>.</p>
+        <p>2. <strong>Inverse Perspective Mapping (IPM):</strong> Computes homography <code>H</code> mapping the perspective trapezoid to an orthorectified top-down bird's-eye view inset shown on the top-right of each HUD frame.</p>
+        <p>3. <strong>Aspect Ratio & Dimension Sufficiency:</strong> Using the perspective depth ratio between threshold and far end, the engine computes visible length-to-width ratio <code>L/W</code> invariant to unknown absolute height.</p>
+        <p>4. <strong>Dual-Class Decision Engine:</strong> Simultaneously evaluates whether the strip meets the stringent certification standards of heavy jet transport versus the agile rough-field requirements of fixed-wing RC planes/UAVs.</p>
+    </div>
+</body>
+</html>
